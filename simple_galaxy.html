@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Present Galaxy: Aprende y Juega</title>
+    <!-- Carga de Tailwind CSS para un diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos personalizados para la tipografía y el fondo */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #0c4a6e 100%); /* Fondo azul oscuro galáctico */
+            color: #e0f2f1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .card-container {
+            background-color: rgba(30, 41, 59, 0.95); /* Azul oscuro semitransparente */
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            max-width: 900px;
+            width: 100%;
+            margin-top: 1rem;
+            border: 2px solid #3b82f6; /* Borde azul brillante */
+        }
+
+        .btn-primary {
+            background-color: #3b82f6; /* Azul brillante */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-game {
+            background-color: #10b981; /* Verde esmeralda */
+            color: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            transition: transform 0.2s, background-color 0.2s;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        .btn-game:hover {
+            background-color: #059669;
+            transform: scale(1.05);
+        }
+
+        .correct {
+            background-color: #065f46; /* Verde oscuro para correcto */
+            border: 2px solid #34d399;
+        }
+        .incorrect {
+            background-color: #991b1b; /* Rojo oscuro para incorrecto */
+            border: 2px solid #f87171;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Contenedor principal de la aplicación -->
+    <div class="card-container">
+        
+        <!-- Encabezado de la Galaxia -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-[#93c5fd] tracking-wide">
+                🚀 Simple Present Galaxy 🌟
+            </h1>
+            <p class="text-xl mt-2 text-gray-300">Aprende y Domina el Presente Simple en Inglés</p>
+        </header>
+
+        <!-- Navegación y Contenido -->
+        <main>
+            <!-- Contenedor para la navegación (botones) -->
+            <nav class="flex flex-wrap justify-center gap-4 mb-8">
+                <button onclick="changeSection('explicacion')" class="btn-primary">📖 Explicación</button>
+                <button onclick="changeSection('reglas_s')" class="btn-primary">💡 Regla de la 'S'</button>
+                <button onclick="changeSection('estructuras')" class="btn-primary">📐 Estructuras</button>
+                <button onclick="changeSection('juego1')" class="btn-game">🕹️ Misión 1: S/ES</button>
+                <button onclick="changeSection('juego2')" class="btn-game">🎮 Misión 2: Negativas</button>
+            </nav>
+
+            <!-- Contenido de las secciones -->
+            <section id="content_container" class="p-6 rounded-xl bg-gray-800 border border-blue-700 transition-all duration-300">
+                <!-- El contenido se cargará aquí dinámicamente -->
+            </section>
+        </main>
+
+        <!-- Área de mensajes de juego o feedback -->
+        <div id="feedback-area" class="mt-6 text-center text-2xl font-bold p-4 rounded-xl hidden"></div>
+
+        <!-- Pie de página (Footer) -->
+        <footer class="mt-8 text-center text-gray-400 text-sm">
+            Diseñado para la práctica interactiva del Presente Simple. ¡Sigue explorando!
+        </footer>
+    </div>
+
+    <!-- JavaScript para la interactividad -->
+    <script>
+        // Objeto que almacena el contenido de cada sección
+        const sections = {
+            explicacion: `
+                <h2 class="text-3xl font-bold mb-4 text-blue-400">¿Qué es el Simple Present?</h2>
+                <p class="mb-4">Lo usamos para dos cosas principales:</p>
+                <ul class="list-disc list-inside space-y-2 ml-4">
+                    <li>✅  **Hábitos y Rutinas:** Cosas que haces regularmente (e.g., *I drink coffee every morning.*).</li>
+                    <li>✅  **Hechos Generales:** Verdades que siempre son ciertas (e.g., *The sun rises in the East.*).</li>
+                </ul>
+                <div class="mt-4 p-3 bg-blue-900 rounded-lg border-l-4 border-blue-400">
+                    <p class="font-semibold">¡A practicar!</p>
+                    <p>El reto principal es recordar la regla de la 'S' para la tercera persona del singular (He, She, It).</p>
+                </div>
+            `,
+            reglas_s: `
+                <h2 class="text-3xl font-bold mb-4 text-green-400">La Regla de la 'S' (¡La más importante!)</h2>
+                <p class="mb-4">Cuando el sujeto es **He, She, o It**, ¡el verbo lleva una **-S** al final!</p>
+                <div class="bg-yellow-900 p-4 rounded-lg mb-4">
+                    <p class="text-xl font-bold text-yellow-300">Ejemplos Clave:</p>
+                    <ul class="list-none space-y-2 mt-2">
+                        <li>I work / <strong class="text-yellow-100">She work<span class="text-red-400">s</span></strong></li>
+                        <li>You study / <strong class="text-yellow-100">He studie<span class="text-red-400">s</span></strong></li>
+                        <li>They go / <strong class="text-yellow-100">It go<span class="text-red-400">es</span></strong></li>
+                    </ul>
+                </div>
+                <h3 class="text-xl font-semibold mt-6 text-green-300">Casos Especiales:</h3>
+                <ul class="list-disc list-inside space-y-2 ml-4">
+                    <li>Verbos que terminan en **-ss, -sh, -ch, -x, -o, -z** (e.g., *watch, go, kiss*): Se añade **-ES** (He watch<span class="text-red-400">es</span>, She go<span class="text-red-400">es</span>).</li>
+                    <li>Verbos que terminan en **-Y** precedida de consonante (e.g., *study, cry*): La Y cambia por **-IES** (He stud<span class="text-red-400">ies</span>).</li>
+                </ul>
+            `,
+            estructuras: `
+                <h2 class="text-3xl font-bold mb-4 text-red-400">Estructuras Básicas</h2>
+                <div class="space-y-4">
+                    <!-- Afirmativa -->
+                    <div class="p-4 bg-gray-700 rounded-lg border-l-4 border-red-500">
+                        <p class="font-bold text-xl mb-2 text-red-300">1. Afirmativa (+)</p>
+                        <p class="mb-2">Sujeto + Verbo (Con 'S' si es He/She/It) + Complemento.</p>
+                        <p class="font-mono text-sm bg-gray-600 p-2 rounded-md">They <span class="text-yellow-300">live</span> in Paris. / She <span class="text-yellow-300">live<span class="text-red-400">s</span></span> in London.</p>
+                    </div>
+                    <!-- Negativa -->
+                    <div class="p-4 bg-gray-700 rounded-lg border-l-4 border-red-500">
+                        <p class="font-bold text-xl mb-2 text-red-300">2. Negativa (-)</p>
+                        <p class="mb-2">Sujeto + DO NOT / DOES NOT + Verbo (Base) + Complemento.</p>
+                        <p class="font-mono text-sm bg-gray-600 p-2 rounded-md">I <span class="text-yellow-300">do not</span> work here. / He <span class="text-yellow-300">does not</span> work here.</p>
+                    </div>
+                    <!-- Interrogativa -->
+                    <div class="p-4 bg-gray-700 rounded-lg border-l-4 border-red-500">
+                        <p class="font-bold text-xl mb-2 text-red-300">3. Interrogativa (?) - Preguntas de Sí/No</p>
+                        <p class="mb-2">DO / DOES + Sujeto + Verbo (Base) + Complemento?</p>
+                        <p class="font-mono text-sm bg-gray-600 p-2 rounded-md"><span class="text-yellow-300">Do</span> you speak Spanish? / <span class="text-yellow-300">Does</span> she speak German?</p>
+                    </div>
+                </div>
+            `,
+            // El contenido de los juegos se genera y maneja completamente en el script
+            juego1: `
+                <h2 class="text-3xl font-bold mb-6 text-yellow-400">Misión 1: La Regla de la 'S' (Tercera Persona)</h2>
+                <p class="text-lg mb-4">Elige la forma verbal correcta para completar la oración.</p>
+                <div id="game1-question" class="text-2xl font-semibold p-4 mb-6 bg-gray-900 rounded-lg"></div>
+                <div id="game1-options" class="grid grid-cols-2 gap-4">
+                    <!-- Opciones de botones se cargarán aquí -->
+                </div>
+                <div id="game1-result" class="mt-4 text-center font-bold text-xl min-h-[3rem]"></div>
+            `,
+            juego2: `
+                <h2 class="text-3xl font-bold mb-6 text-purple-400">Misión 2: Negativas (Do not / Does not)</h2>
+                <p class="text-lg mb-4">Selecciona la forma negativa correcta.</p>
+                <div id="game2-question" class="text-2xl font-semibold p-4 mb-6 bg-gray-900 rounded-lg"></div>
+                <div id="game2-options" class="grid grid-cols-2 gap-4">
+                    <!-- Opciones de botones se cargarán aquí -->
+                </div>
+                <div id="game2-result" class="mt-4 text-center font-bold text-xl min-h-[3rem]"></div>
+            `
+        };
+
+        // Estado y Data de los Juegos
+        let currentSection = 'explicacion';
+        
+        const game1Questions = [
+            { q: "My dog ______ (eat) too much.", subject: "My dog", verb: "eat", correct: "eats" },
+            { q: "We ______ (go) to school by bus.", subject: "We", verb: "go", correct: "go" },
+            { q: "She ______ (watch) TV every night.", subject: "She", verb: "watch", correct: "watches" },
+            { q: "I ______ (study) English on Mondays.", subject: "I", verb: "study", correct: "study" },
+            { q: "The company ______ (start) at 9 AM.", subject: "The company", verb: "start", correct: "starts" }
+        ];
+        let currentQIndex1 = 0;
+        
+        const game2Questions = [
+            { q: "They ______ (not/like) pizza.", subject: "They", verb: "like", correct: "do not like" },
+            { q: "He ______ (not/play) basketball.", subject: "He", verb: "play", correct: "does not play" },
+            { q: "I ______ (not/speak) German.", subject: "I", verb: "speak", correct: "do not speak" },
+            { q: "The machine ______ (not/work) properly.", subject: "The machine", verb: "work", correct: "does not work" },
+            { q: "We ______ (not/have) classes today.", subject: "We", verb: "have", correct: "do not have" }
+        ];
+        let currentQIndex2 = 0;
+
+
+        /**
+         * Función principal para cambiar el contenido de la sección
+         * @param {string} sectionId - ID de la sección a mostrar
+         */
+        function changeSection(sectionId) {
+            currentSection = sectionId;
+            const contentContainer = document.getElementById('content_container');
+            const feedbackArea = document.getElementById('feedback-area');
+
+            // Ocultar feedback y limpiar resultados de juegos anteriores
+            feedbackArea.classList.add('hidden');
+            
+            // Si es una sección de explicación, cargar el HTML estático
+            if (sections[sectionId]) {
+                contentContainer.innerHTML = sections[sectionId];
+            }
+
+            // Inicializar juegos si es necesario
+            if (sectionId === 'juego1') {
+                initializeGame1();
+            } else if (sectionId === 'juego2') {
+                initializeGame2();
+            }
+
+            // Resaltar el botón activo (opcional)
+            document.querySelectorAll('.btn-primary, .btn-game').forEach(btn => {
+                btn.classList.remove('ring-4', 'ring-offset-2', 'ring-blue-300', 'bg-blue-600', 'bg-emerald-600');
+                if (btn.onclick.toString().includes(sectionId)) {
+                    if (sectionId.startsWith('juego')) {
+                        btn.classList.add('ring-4', 'ring-offset-2', 'ring-emerald-300', 'bg-emerald-600');
+                    } else {
+                        btn.classList.add('ring-4', 'ring-offset-2', 'ring-blue-300', 'bg-blue-600');
+                    }
+                }
+            });
+        }
+        
+        // --- Lógica del Juego 1 (Regla de la 'S') ---
+
+        function initializeGame1() {
+            currentQIndex1 = 0;
+            loadGame1Question();
+        }
+
+        function loadGame1Question() {
+            if (currentQIndex1 >= game1Questions.length) {
+                document.getElementById('game1-question').innerHTML = '¡Misión Completada! 🏆';
+                document.getElementById('game1-options').innerHTML = '<p class="col-span-2 text-center text-green-400 font-bold">¡Lo has logrado! Vuelve a la explicación o intenta la Misión 2.</p>';
+                document.getElementById('game1-result').innerHTML = '';
+                return;
+            }
+
+            const data = game1Questions[currentQIndex1];
+            const verbBase = data.verb;
+            const questionText = data.q.replace(`(${verbBase})`, '____');
+            const optionsDiv = document.getElementById('game1-options');
+            const resultDiv = document.getElementById('game1-result');
+
+            document.getElementById('game1-question').textContent = `${currentQIndex1 + 1}. Completa: ${questionText}`;
+            optionsDiv.innerHTML = '';
+            resultDiv.innerHTML = '';
+
+            // Generar opciones (la correcta y la incorrecta con/sin 's')
+            const incorrectOption = data.correct.endsWith('s') ? verbBase : data.correct + 's';
+            
+            // Asegurarse de que las opciones no sean idénticas
+            let options = [data.correct];
+            if (incorrectOption !== data.correct) {
+                 options.push(incorrectOption);
+            } else {
+                // Si son iguales (raro, pero posible en casos edge), añade una base limpia
+                options.push(verbBase);
+                options = [...new Set(options)]; // Eliminar duplicados
+            }
+
+            // Desordenar opciones
+            options.sort(() => Math.random() - 0.5);
+
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-game text-xl w-full';
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer1(option, data.correct);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer1(selected, correct) {
+            const resultDiv = document.getElementById('game1-result');
+            const optionsDiv = document.getElementById('game1-options');
+            
+            // Desactivar botones temporalmente
+            Array.from(optionsDiv.children).forEach(btn => btn.disabled = true);
+            
+            if (selected === correct) {
+                resultDiv.className = 'mt-4 text-center font-bold text-xl p-3 rounded-lg correct';
+                resultDiv.textContent = '¡Correcto! Sigue así. ✅';
+                currentQIndex1++;
+            } else {
+                resultDiv.className = 'mt-4 text-center font-bold text-xl p-3 rounded-lg incorrect';
+                resultDiv.textContent = `Incorrecto. La respuesta correcta era: ${correct}. ❌`;
+            }
+
+            // Cargar la siguiente pregunta después de un breve retraso
+            setTimeout(() => {
+                loadGame1Question();
+            }, 1500);
+        }
+
+        // --- Lógica del Juego 2 (Negativas Do/Does) ---
+
+        function initializeGame2() {
+            currentQIndex2 = 0;
+            loadGame2Question();
+        }
+
+        function loadGame2Question() {
+            if (currentQIndex2 >= game2Questions.length) {
+                document.getElementById('game2-question').innerHTML = '¡Misión Completada! 🏆';
+                document.getElementById('game2-options').innerHTML = '<p class="col-span-2 text-center text-purple-400 font-bold">¡Misión de Negativas completada! Vuelve a la explicación o descansa.</p>';
+                document.getElementById('game2-result').innerHTML = '';
+                return;
+            }
+
+            const data = game2Questions[currentQIndex2];
+            const verbBase = data.verb;
+            const subject = data.subject;
+            const questionText = data.q.replace(`(not/${verbBase})`, '____');
+            const optionsDiv = document.getElementById('game2-options');
+            const resultDiv = document.getElementById('game2-result');
+
+            document.getElementById('game2-question').textContent = `${currentQIndex2 + 1}. Completa: ${questionText}`;
+            optionsDiv.innerHTML = '';
+            resultDiv.innerHTML = '';
+
+            // Generar opciones: la correcta y las trampas comunes
+            let options = [data.correct];
+            let incorrect1, incorrect2;
+
+            if (data.correct.includes('does')) {
+                // Trampa 1: Usar 'do not'
+                incorrect1 = `do not ${verbBase}`;
+                // Trampa 2: Usar 'does not' + 's' (olvidar que el verbo va en base)
+                incorrect2 = `does not ${verbBase}s`; 
+            } else {
+                // Trampa 1: Usar 'does not'
+                incorrect1 = `does not ${verbBase}`;
+                // Trampa 2: Usar la negación incorrecta del otro pronombre
+                incorrect2 = `don't ${verbBase}s`; 
+            }
+            
+            options.push(incorrect1, incorrect2);
+            options = [...new Set(options)]; // Eliminar duplicados
+            
+            // Desordenar opciones
+            options.sort(() => Math.random() - 0.5);
+
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-game text-xl w-full bg-purple-600 hover:bg-purple-700';
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer2(option, data.correct);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer2(selected, correct) {
+            const resultDiv = document.getElementById('game2-result');
+            const optionsDiv = document.getElementById('game2-options');
+            
+            // Desactivar botones temporalmente
+            Array.from(optionsDiv.children).forEach(btn => btn.disabled = true);
+
+            if (selected === correct) {
+                resultDiv.className = 'mt-4 text-center font-bold text-xl p-3 rounded-lg correct';
+                resultDiv.textContent = '¡Excelente! Negación Perfecta. ✅';
+                currentQIndex2++;
+            } else {
+                resultDiv.className = 'mt-4 text-center font-bold text-xl p-3 rounded-lg incorrect';
+                resultDiv.textContent = `Error. La forma correcta es: ${correct}. Recuerda que DOES NOT se usa con He/She/It. ❌`;
+            }
+
+            // Cargar la siguiente pregunta después de un breve retraso
+            setTimeout(() => {
+                loadGame2Question();
+            }, 1500);
+        }
+
+        // Cargar la sección de explicación al inicio
+        window.onload = () => {
+            changeSection('explicacion');
+        };
+    </script>
+
+</body>
+</html>
